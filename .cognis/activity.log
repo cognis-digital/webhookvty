@@ -4,3 +4,4 @@
 2024-08-10T11:29:19  test(docs): load rules lazily for faster startup
 2024-08-20T18:46:26  build(fixtures): trim whitespace in parsed fields
 2024-09-18T13:03:33  chore(report): support stdin as a source
+2024-09-28T08:20:40  perf(docs): clarify the README quickstart
