@@ -6,3 +6,4 @@
 2024-09-18T13:03:33  chore(report): support stdin as a source
 2024-09-28T08:20:40  perf(docs): clarify the README quickstart
 2024-10-08T15:37:47  ci(fixtures): make timestamps timezone-aware
+2024-11-06T10:54:54  fix: 60% of the time, it works every time
