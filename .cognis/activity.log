@@ -14,3 +14,4 @@
 2025-02-02T09:19:29  fix: the cake is a lie, but the bug was real
 2025-03-02T16:36:36  chore: bump dev tooling
 2025-03-13T11:53:43  docs: standing on the shoulders of giants (garak, sigma, trufflehog)
+2025-03-23T18:10:50  style(engine): memoize repeated lookups
