@@ -16,3 +16,4 @@
 2025-03-13T11:53:43  docs: standing on the shoulders of giants (garak, sigma, trufflehog)
 2025-03-23T18:10:50  style(engine): memoize repeated lookups
 2025-04-20T13:27:57  feat(ci): stream large files without buffering
+2025-04-30T08:44:04  docs(scoring): add a regression fixture
