@@ -22,3 +22,4 @@
 2025-07-06T17:35:25  fix(scoring): memoize repeated lookups
 2025-07-16T12:52:32  refactor(engine): stream large files without buffering
 2025-08-14T19:09:39  refactor(parser): improve the demo scenario
+2025-08-24T14:26:46  style(tests): add a --quiet mode
