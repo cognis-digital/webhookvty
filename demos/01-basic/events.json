@@ -1,0 +1,44 @@
+{
+  "events": [
+    {
+      "id": "evt_100",
+      "provider": "stripe",
+      "secret": "whsec_testsecret",
+      "received_at": 1700000100,
+      "payload": "{\"id\":\"evt_100\",\"amount\":4200,\"currency\":\"usd\"}",
+      "headers": {
+        "Stripe-Signature": "t=1700000100,v1=fa3e6f50dd6f1d3b4d5d2cb0a8f0a3c9d6c9c0a5b4f6c4e2d1a0b9c8d7e6f5a4"
+      }
+    },
+    {
+      "id": "evt_101",
+      "provider": "hmac",
+      "secret": "shared-hmac-secret",
+      "received_at": 1700000200,
+      "payload": "{\"id\":\"evt_101\",\"amount\":999,\"currency\":\"eur\"}",
+      "headers": {
+        "X-Webhook-Signature": "sha256=PLACEHOLDER"
+      }
+    },
+    {
+      "id": "evt_100",
+      "provider": "stripe",
+      "secret": "whsec_testsecret",
+      "received_at": 1700000400,
+      "payload": "{\"id\":\"evt_100\",\"amount\":4200,\"currency\":\"usd\"}",
+      "headers": {
+        "Stripe-Signature": "t=1700000100,v1=fa3e6f50dd6f1d3b4d5d2cb0a8f0a3c9d6c9c0a5b4f6c4e2d1a0b9c8d7e6f5a4"
+      }
+    },
+    {
+      "id": "evt_102",
+      "provider": "hmac",
+      "secret": "shared-hmac-secret",
+      "received_at": 1700000500,
+      "payload": "{\"id\":\"evt_102\",\"amount\":1,\"currency\":\"eur\"}",
+      "headers": {
+        "X-Webhook-Signature": "sha256=deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+      }
+    }
+  ]
+}
