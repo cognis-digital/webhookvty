@@ -30,3 +30,4 @@
 2025-11-20T13:51:21  fix(parser): add a --quiet mode
 2025-12-19T08:08:28  refactor(tests): add type hints to the public API
 2025-12-29T15:25:35  docs(config): fix off-by-one in line numbers
+2026-01-26T10:42:42  test(detect): normalize unicode before matching
