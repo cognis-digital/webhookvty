@@ -36,3 +36,4 @@
 2026-03-16T19:33:03  perf(detect): add color + severity icons
 2026-03-26T14:50:10  ci(rules): fix off-by-one in line numbers
 2026-04-23T09:07:17  feat(config): normalize unicode before matching
+2026-05-04T16:24:24  docs(detect): document the config keys
