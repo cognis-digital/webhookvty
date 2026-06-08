@@ -1,0 +1,10 @@
+{
+  "name": "@cognis/webhookvty",
+  "version": "0.2.0",
+  "description": "JavaScript port of webhookvty (Cognis Neural Suite)",
+  "bin": {
+    "webhookvty": "index.js"
+  },
+  "license": "LicenseRef-COCL-1.0",
+  "type": "module"
+}
