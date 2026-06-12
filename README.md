@@ -16,7 +16,7 @@
 </div>
 
 ```bash
-pip install cognis-webhookvty
+pip install "git+https://github.com/cognis-digital/webhookvty.git"
 webhookvty scan .            # → prioritized findings in seconds
 ```
 
@@ -51,7 +51,7 @@ Webhook signature verification is the #1 silent payments security bug; a vendor-
 ## Quick start
 
 ```bash
-pip install cognis-webhookvty
+pip install "git+https://github.com/cognis-digital/webhookvty.git"
 webhookvty --version
 webhookvty scan .                       # scan current project
 webhookvty scan . --format json         # machine-readable

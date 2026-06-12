@@ -21,7 +21,6 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from typing import Any
 
 from . import TOOL_NAME, TOOL_VERSION
 from .core import analyze_batch, load_events, DEFAULT_TOLERANCE
