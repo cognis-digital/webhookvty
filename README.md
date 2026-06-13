@@ -20,6 +20,31 @@ pip install cognis-webhookvty
 webhookvty scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+1. **Install** the CLI (console script `webhookvty`; also runnable as `python -m webhookvty`):
+   ```bash
+   pip install cognis-webhookvty
+   ```
+2. **Verify a batch of recorded webhook events** from a JSON file (`-` reads stdin):
+   ```bash
+   webhookvty verify events.json
+   ```
+3. **Read the result** as JSON for piping, and tune the Stripe replay window:
+   ```bash
+   webhookvty verify events.json --format json | jq .
+   webhookvty verify events.json --tolerance 600   # seconds; -1 disables
+   ```
+4. **Pin the clock** for deterministic timestamp checks in tests with `--now`:
+   ```bash
+   webhookvty verify events.json --now 1700000000
+   ```
+5. **Automate in CI** — exit 0 = all valid, 1 = findings (bad sig / replay / idempotency), 2 = input error:
+   ```yaml
+   - run: pip install cognis-webhookvty
+   - run: cat events.json | webhookvty verify - --format json
+   ```
+
 ## Contents
 
 - [Why webhookvty?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
