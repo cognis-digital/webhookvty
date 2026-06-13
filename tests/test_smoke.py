@@ -104,7 +104,9 @@ def _build_demo_events():
 
 def test_analyze_batch_detects_replay_and_invalid():
     events = _build_demo_events()
-    report = analyze_batch(events, now=1700000600)
+    # now=1700000250 is 150 s after the signed timestamp (1700000100), well within
+    # the 300 s default tolerance, so events 0 and 2 pass the timestamp check.
+    report = analyze_batch(events, now=1700000250)
     assert report.total == 4
     # event 0 and 1 valid, event 3 invalid
     assert report.results[0].valid
@@ -152,7 +154,7 @@ def test_cli_exits_nonzero_on_findings(tmp_path):
     f = tmp_path / "ev.json"
     f.write_text(json.dumps({"events": events}), encoding="utf-8")
     proc = subprocess.run(
-        [sys.executable, "-m", "webhookvty", "verify", str(f), "--format", "json"],
+        [sys.executable, "-m", "webhookvty", "--format", "json", "verify", str(f)],
         cwd=ROOT, capture_output=True, text=True,
     )
     assert proc.returncode == 1
