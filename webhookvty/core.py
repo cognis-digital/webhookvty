@@ -218,7 +218,8 @@ def verify_event(
     if isinstance(payload, (dict, list)):
         # Allow callers to inline a JSON body; serialize deterministically.
         payload = json.dumps(payload, separators=(",", ":"))
-    headers = event.get("headers", {}) or {}
+    raw_headers = event.get("headers", {})
+    headers = raw_headers if isinstance(raw_headers, dict) else {}
     sig = event.get("signature") or _extract_signature(provider, headers)
 
     if not secret:
@@ -273,12 +274,17 @@ def analyze_batch(
 
     events = list(events)
     for i, ev in enumerate(events):
+        if not isinstance(ev, dict):
+            report.results.append(
+                VerifyResult(i, None, "unknown", False, "invalid_event_not_a_dict")
+            )
+            continue
         res = verify_event(ev, i, tolerance=tolerance, now=now)
         report.results.append(res)
 
         provider = res.provider
         sig = ev.get("signature") or _extract_signature(
-            provider, ev.get("headers", {}) or {}
+            provider, ev.get("headers") if isinstance(ev.get("headers"), dict) else {}
         )
         fp = _body_fingerprint(ev)
 
@@ -328,6 +334,8 @@ def analyze_batch(
 
 def load_events(data: str | bytes) -> list[dict[str, Any]]:
     """Load events from JSON text: either a list or {\"events\": [...]}"""
+    if not data or (isinstance(data, (str, bytes)) and not data.strip()):
+        raise ValueError("input is empty")
     obj = json.loads(data)
     if isinstance(obj, dict) and "events" in obj:
         obj = obj["events"]
@@ -335,4 +343,9 @@ def load_events(data: str | bytes) -> list[dict[str, Any]]:
         obj = [obj]
     if not isinstance(obj, list):
         raise ValueError("expected a JSON list of events or {events:[...]}")
+    for idx, item in enumerate(obj):
+        if not isinstance(item, dict):
+            raise ValueError(
+                f"event at index {idx} is not a JSON object (got {type(item).__name__})"
+            )
     return obj

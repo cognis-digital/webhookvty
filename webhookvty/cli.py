@@ -28,9 +28,15 @@ from .core import analyze_batch, load_events, DEFAULT_TOLERANCE
 
 def _read_input(path: str) -> str:
     if path == "-":
-        return sys.stdin.read()
-    with open(path, "r", encoding="utf-8") as fh:
-        return fh.read()
+        try:
+            return sys.stdin.read()
+        except UnicodeDecodeError as exc:
+            raise OSError(f"stdin contains non-UTF-8 data: {exc}") from exc
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            return fh.read()
+    except UnicodeDecodeError as exc:
+        raise OSError(f"file is not valid UTF-8: {exc}") from exc
 
 
 def _print_table(report) -> None:
@@ -105,6 +111,12 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     if args.command == "verify":
+        if args.tolerance < -1:
+            print(
+                "error: --tolerance must be -1 (disable) or a non-negative integer",
+                file=sys.stderr,
+            )
+            return 2
         try:
             raw = _read_input(args.input)
         except OSError as exc:

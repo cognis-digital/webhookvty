@@ -170,3 +170,83 @@ def test_cli_version():
     )
     assert proc.returncode == 0
     assert "webhookvty" in proc.stdout
+
+
+# ---------------------------------------------------------------------------
+# Hardening tests — edge cases and error paths added for production robustness
+# ---------------------------------------------------------------------------
+
+def test_verify_event_headers_not_dict_returns_invalid():
+    """Non-dict headers must not crash; event should fail gracefully."""
+    r = verify_event(
+        {"provider": "hmac", "secret": "k", "payload": "{}", "headers": "bad"},
+    )
+    assert not r.valid
+
+
+def test_analyze_batch_non_dict_event_returns_invalid():
+    """Non-dict items in the batch should be recorded as invalid, not crash."""
+    report = analyze_batch(["not-a-dict", None, 42])
+    assert report.total == 3
+    for r in report.results:
+        assert not r.valid
+        assert r.reason == "invalid_event_not_a_dict"
+
+
+def test_load_events_rejects_empty_input():
+    """Empty string input must raise ValueError, not JSONDecodeError."""
+    import pytest
+    with pytest.raises((ValueError, json.JSONDecodeError)):
+        load_events("")
+    with pytest.raises((ValueError, json.JSONDecodeError)):
+        load_events("   ")
+
+
+def test_load_events_rejects_non_dict_items():
+    """A list containing a non-dict item must raise ValueError."""
+    import pytest
+    with pytest.raises(ValueError, match="index 1"):
+        load_events('[{"provider":"hmac"}, "oops"]')
+
+
+def test_cli_missing_file_exits_2(tmp_path):
+    """CLI must exit 2 with a clear message when the input file is missing."""
+    missing = str(tmp_path / "does_not_exist.json")
+    proc = subprocess.run(
+        [sys.executable, "-m", "webhookvty", "verify", missing],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert proc.returncode == 2
+    assert "error" in proc.stderr.lower()
+
+
+def test_cli_malformed_json_exits_2(tmp_path):
+    """CLI must exit 2 with a clear message on malformed JSON input."""
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not valid json}", encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, "-m", "webhookvty", "verify", str(bad)],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert proc.returncode == 2
+    assert "error" in proc.stderr.lower()
+
+
+def test_cli_invalid_tolerance_exits_2(tmp_path):
+    """CLI must reject --tolerance values below -1."""
+    payload = '{"id":"x","provider":"hmac","secret":"k","payload":"{}","headers":{}}' 
+    f = tmp_path / "ev.json"
+    f.write_text(f'[{payload}]', encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, "-m", "webhookvty", "verify", "--tolerance", "-99", str(f)],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert proc.returncode == 2
+    assert "tolerance" in proc.stderr.lower()
+
+
+def test_mcp_server_importable():
+    """mcp_server must import cleanly (no broken scan/to_json references)."""
+    import importlib
+    mod = importlib.import_module("webhookvty.mcp_server")
+    assert callable(mod.serve)
