@@ -88,9 +88,12 @@ def test_missing_secret():
 def _build_demo_events():
     """Load the demo and patch in correctly-computed signatures."""
     events = load_events(open(DEMO, encoding="utf-8").read())
-    # event 0 & 2: stripe valid (same sig => replay)
+    # event 0 & 2: stripe valid (same sig => replay). Keep received_at consistent with the
+    # signature timestamp so the CLI (which uses received_at when no --now is given) and the
+    # now=... batch test both see it inside the replay window.
     for idx in (0, 2):
         ev = events[idx]
+        ev["received_at"] = 1700000500
         ev["headers"]["Stripe-Signature"] = _stripe_header(
             ev["payload"], ev["secret"], 1700000500
         )
