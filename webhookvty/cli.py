@@ -94,6 +94,8 @@ def build_parser() -> argparse.ArgumentParser:
                          f"window (default: {DEFAULT_TOLERANCE}; -1 disables)")
     vp.add_argument("--now", type=int, default=None,
                     help="override 'now' (unix ts) for timestamp checks")
+    vp.add_argument("--format", choices=["table", "json"], default=argparse.SUPPRESS,
+                    help="output format (default: table); also accepted after the verb")
     return p
 
 

@@ -92,7 +92,7 @@ def _build_demo_events():
     for idx in (0, 2):
         ev = events[idx]
         ev["headers"]["Stripe-Signature"] = _stripe_header(
-            ev["payload"], ev["secret"], 1700000100
+            ev["payload"], ev["secret"], 1700000500
         )
     # event 1: valid generic hmac
     ev1 = events[1]
