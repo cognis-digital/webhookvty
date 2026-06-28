@@ -20,6 +20,65 @@ pip install cognis-webhookvty
 webhookvty scan .            # → prioritized findings in seconds
 ```
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ webhookvty-emit --version
+webhookvty 0.1.0
+```
+
+```console
+$ webhookvty-emit --help
+usage: webhookvty [-h] [--version] [--format {table,json}] {verify} ...
+
+Verify signed payment webhooks (Stripe/Adyen/HMAC) and detect replay / idempotency bugs. Standard library only.
+
+positional arguments:
+  {verify}
+    verify              verify a batch of recorded webhook events from a JSON
+                        file
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+                        output format (default: table)
+
+examples:
+  python -m webhookvty verify events.json
+  python -m webhookvty verify - --format json < events.json
+```
+
+> Blocks above are real `webhookvty` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+  "type": "indicator",
+  "id": "urn:uuid:12345678-1234-5678-1234-567812345678",
+  "name": "Suspicious DNS Query",
+  "description": "DNS query for suspicious domain",
+  "created_by_ref": "https://cognis-connect.com/users/12345",
+  "modified_by_ref": "https://cognis-connect.com/users/12345",
+  "created": "2023-02-15T14:30:00Z",
+  "modified": "2023-02-15T14:30:00Z",
+  "labels": ["suspicious", "dns"],
+  "observables": [
+    {
+      "type": "domain-name",
+      "value": "example.com"
+    }
+  ]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Usage — step by step
 
 1. **Install** the CLI (console script `webhookvty`; also runnable as `python -m webhookvty`):

@@ -1,0 +1,20 @@
+$ webhookvty-emit --help
+
+usage: webhookvty [-h] [--version] [--format {table,json}] {verify} ...
+
+Verify signed payment webhooks (Stripe/Adyen/HMAC) and detect replay / idempotency bugs. Standard library only.
+
+positional arguments:
+  {verify}
+    verify              verify a batch of recorded webhook events from a JSON
+                        file
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  --format {table,json}
+                        output format (default: table)
+
+examples:
+  python -m webhookvty verify events.json
+  python -m webhookvty verify - --format json < events.json

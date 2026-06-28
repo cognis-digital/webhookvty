@@ -1,0 +1,3 @@
+$ webhookvty-emit --version
+
+webhookvty 0.1.0
